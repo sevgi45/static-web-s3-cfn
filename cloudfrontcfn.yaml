@@ -10,15 +10,13 @@ Parameters:
     AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
   
 Resources:
-  
   MyS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-  
       BucketName: !Ref KittenSubDomainName
       OwnershipControls:
         Rules:
-          -ObjectOwnership: BucketOwnerEnforced
+          - ObjectOwnership: BucketOwnerEnforced
       PublicAccessBlockConfiguration:
         BlockPublicAcls: FALSE 
       WebsiteConfiguration:
