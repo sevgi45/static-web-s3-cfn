@@ -1,31 +1,34 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: |
-  This cfn file is used for creating a template which runs S3 static 
-  web-hosting using cloudfront distribution.
+  This cfn file is used for creating a template which
+   run S3 static webhosting using cloudfront distribution.
 Parameters:
-
-  KittensSubDomainName:
-    Description: full domain name like kittens.clarusway.us
+  
+  KittenSubDomainName:
+    Description: full domain name like kittens.mycloudvoyage.com
     Type: String
     AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
+  
 Resources:
+  
   MyS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref KittensSubDomainName
+  
+      BucketName: !Ref KittenSubDomainName
       OwnershipControls:
         Rules:
-          - ObjectOwnership: BucketOwnerEnforced
+          -ObjectOwnership: BucketOwnerEnforced
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: FALSE
+        BlockPublicAcls: FALSE 
       WebsiteConfiguration:
-        IndexDocument: index.html
-  
+        IndexDocument: index.html 
+       
   MyS3BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref MyS3Bucket
-      PolicyDocument:
+      PolicyDocument: 
         Version: 2012-10-17
         Statement:
           - Action:
@@ -42,48 +45,51 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases: 
-          - !Ref KittensSubDomainName
-        Comment: my first cloudfront cfn
-        DefaultCacheBehavior: 
-          AllowedMethods: 
-            - GET
-            - HEAD
-          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
-          Compress: true
-          TargetOriginId: osvaldocrf
-          ViewerProtocolPolicy: allow-all
-        DefaultRootObject: index.html
-        Enabled: true
+          - !Ref KittenSubDomainName
+        Comment: My First Cloudfront cfn 
+        DefaultCacheBehavior:
+            AllowedMethods: 
+              - GET 
+              - HEAD 
+            CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+            Compress: true 
+            TargetOriginId: sevgicrf 
+            ViewerProtocolPolicy: allow-all 
+        DefaultRootObject: index.html 
+        Enabled: true 
         HttpVersion: http2
         Origins: 
-          - CustomOriginConfig: 
-              OriginProtocolPolicy: http-only
-            DomainName:  !Select [2, !Split ["/", !GetAtt MyS3Bucket.WebsiteURL]]
-            Id: osvaldocrf
+          - CustomOriginConfig:   
+              OriginProtocolPolicy:  http-only 
+            DomainName: !Select [2, !Split ["/", !GetAtt MyS3Bucket.WebsiteURL]]
+            Id: sevgicrf 
         PriceClass: PriceClass_All
         ViewerCertificate: 
-          AcmCertificateArn: arn:aws:acm:us-east-1:046402772087:certificate/f872f3db-ba9d-46df-8c6a-9d165036e8ee
-          MinimumProtocolVersion: TLSv1.2_2021
-          SslSupportMethod: sni-only
+            AcmCertificateArn: arn:aws:acm:us-east-1:615714535370:certificate/aded1d67-6d6d-47ff-8f6e-7d91c38d58db
+            MinimumProtocolVersion: TLSv1.2_2021
+            SslSupportMethod: sni-only 
+
 
   MyRoute53:
     Type: AWS::Route53::RecordSetGroup
     Properties:
-      HostedZoneId: Z08348542LMKDSH94CCW6
+      HostedZoneId: Z04399041XFE7B90DHXZ
       RecordSets: 
-      - AliasTarget: 
-          DNSName: !GetAtt MyCloudFront.DomainName
-          HostedZoneId: Z2FDTNDATAQYW2
-        Name: !Ref KittensSubDomainName
-        Type: A
+        - AliasTarget: 
+            DNSName: !GetAtt MyCloudFront.DomainName 
+            HostedZoneId: Z2FDTNDATAQYW2
+          Name: !Ref KittenSubDomainName
+          Type: A 
 
 Outputs:
-  BucketName: 
+  BucketName:
     Description: S3 Bucket URL for Kittens Website
     Value: !GetAtt MyS3Bucket.WebsiteURL
-  CloudfrontEndpoint:
+  CloudFrontEndpoint: 
     Description: Endpoint for Kittens Cloudfront
     Value: !GetAtt MyCloudFront.DomainName
   FullDomainName:
-    Description: Full Domain Name of my Application
-    Value: !Ref KittensSubDomainName
+    Description: Full Domain Name of my Application 
+    Value: !Ref KittenSubDomainName
+    
+   
